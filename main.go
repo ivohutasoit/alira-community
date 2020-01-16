@@ -5,6 +5,9 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/ivohutasoit/alira-community/route"
+	"github.com/ivohutasoit/alira/model"
+	"github.com/ivohutasoit/alira/model/domain"
 	"github.com/joho/godotenv"
 
 	"github.com/gin-contrib/cors"
@@ -13,6 +16,11 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
 )
+
+func init() {
+	model.GetDatabase().Debug().AutoMigrate(&domain.Community{},
+		&domain.CommunityMember{})
+}
 
 func main() {
 	err := godotenv.Load()
@@ -38,6 +46,9 @@ func main() {
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.tmpl.html", nil)
 	})
+
+	api := &route.ApiRoute{}
+	api.Initialize(router)
 
 	router.Run(":" + port)
 }
