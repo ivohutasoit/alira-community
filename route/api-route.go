@@ -17,6 +17,7 @@ func (route *ApiRoute) Initialize(r *gin.Engine) {
 		apiCommunity := api.Group("/community")
 		{
 			community := &controller.CommunityController{}
+			apiCommunity.POST("", community.CreateHandler)
 			apiCommunity.GET("/:id", community.DetailHandler)
 		}
 	}
