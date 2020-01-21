@@ -27,10 +27,9 @@ func (ctlr *CommunityController) DetailHandler(c *gin.Context) {
 	}
 	if id == "" {
 		if strings.Contains(c.Request.URL.Path, os.Getenv("URL_API")) {
-			c.Header("Content-Type", "application/json")
-			c.JSON(http.StatusBadRequest, gin.H{
-				"code":   400,
-				"status": "Bad Request",
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+				"code":   http.StatusBadRequest,
+				"status": http.StatusText(http.StatusBadRequest),
 				"error":  "id is required",
 			})
 			return
@@ -39,10 +38,9 @@ func (ctlr *CommunityController) DetailHandler(c *gin.Context) {
 	data, err := communityService.Get(id)
 	if err != nil {
 		if strings.Contains(c.Request.URL.Path, os.Getenv("URL_API")) {
-			c.Header("Content-Type", "application/json")
-			c.JSON(http.StatusBadRequest, gin.H{
-				"code":   400,
-				"status": "Bad Request",
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+				"code":   http.StatusBadRequest,
+				"status": http.StatusText(http.StatusBadRequest),
 				"error":  err.Error(),
 			})
 			return
@@ -50,10 +48,9 @@ func (ctlr *CommunityController) DetailHandler(c *gin.Context) {
 	}
 	if c.Request.Method == http.MethodGet {
 		if strings.Contains(c.Request.URL.Path, os.Getenv("URL_API")) {
-			c.Header("Content-Type", "application/json")
 			c.JSON(http.StatusOK, gin.H{
-				"code":   200,
-				"status": "OK",
+				"code":   http.StatusOK,
+				"status": http.StatusText(http.StatusOK),
 				"data":   data,
 			})
 			return
@@ -73,10 +70,9 @@ func (ctlr *CommunityController) CreateHandler(c *gin.Context) {
 	var req Request
 	if strings.Contains(c.Request.URL.Path, os.Getenv("URL_API")) {
 		if err := c.ShouldBindJSON(&req); err != nil {
-			c.Header("Content-Type", "application/json")
-			c.JSON(http.StatusBadRequest, gin.H{
-				"code":   400,
-				"status": "Bad Request",
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+				"code":   http.StatusBadRequest,
+				"status": http.StatusText(http.StatusBadRequest),
 				"error":  err.Error(),
 			})
 			return
@@ -86,10 +82,9 @@ func (ctlr *CommunityController) CreateHandler(c *gin.Context) {
 	data, err := communityService.Create(c.GetString("userid"), req.Name)
 	if err != nil {
 		if strings.Contains(c.Request.URL.Path, os.Getenv("URL_API")) {
-			c.Header("Content-Type", "application/json")
-			c.JSON(http.StatusBadRequest, gin.H{
-				"code":   400,
-				"status": "Bad Request",
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+				"code":   http.StatusBadRequest,
+				"status": http.StatusText(http.StatusBadRequest),
 				"error":  err.Error(),
 			})
 			return
@@ -97,9 +92,8 @@ func (ctlr *CommunityController) CreateHandler(c *gin.Context) {
 	}
 
 	if strings.Contains(c.Request.URL.Path, os.Getenv("URL_API")) {
-		c.Header("Content-Type", "application/json")
-		c.JSON(http.StatusCreated, gin.H{
-			"code":    201,
+		c.JSON(http.StatusOK, gin.H{
+			"code":    http.StatusCreated,
 			"status":  http.StatusText(http.StatusCreated),
 			"message": data["message"].(string),
 		})
