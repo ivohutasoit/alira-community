@@ -10,13 +10,18 @@ import (
 
 type ApiRoute struct{}
 
+var community *controller.CommunityController
+
+func init() {
+	community = &controller.CommunityController{}
+}
+
 func (route *ApiRoute) Initialize(r *gin.Engine) {
 	api := r.Group(os.Getenv("URL_API"))
 	api.Use(middleware.TokenHeaderRequired())
 	{
 		apiCommunity := api.Group("/community")
 		{
-			community := &controller.CommunityController{}
 			apiCommunity.POST("", community.CreateHandler)
 			apiCommunity.GET("/:id", community.DetailHandler)
 		}
