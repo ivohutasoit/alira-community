@@ -44,3 +44,4 @@ or
 For more information about using Go on Heroku, see these Dev Center articles:
 
 - [Go on Heroku](https://devcenter.heroku.com/categories/go)
+- [Golang REST API sample with MariaDB integration using Gin and GORM](https://github.com/velopert/gin-rest-api-sample)
